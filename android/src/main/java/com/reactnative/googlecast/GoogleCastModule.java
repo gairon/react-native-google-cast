@@ -376,7 +376,6 @@ public class GoogleCastModule
         } else {
             Log.i(REACT_CLASS, "Error :> " + GOOGLE_CAST_NOT_AVAILABLE_MESSAGE);
         }
-
     }
 
     private void setupCastListener() {
@@ -385,30 +384,38 @@ public class GoogleCastModule
 
     @Override
     public void onHostResume() {
-        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
-            @Override
-            public void run() {
-                SessionManager sessionManager =
-                        CastContext.getSharedInstance(getReactApplicationContext())
-                                .getSessionManager();
-                sessionManager.addSessionManagerListener(mSessionManagerListener,
-                        CastSession.class);
-            }
-        });
+        if (CAST_AVAILABLE) {
+            getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+                @Override
+                public void run() {
+                    SessionManager sessionManager =
+                            CastContext.getSharedInstance(getReactApplicationContext())
+                                    .getSessionManager();
+                    sessionManager.addSessionManagerListener(mSessionManagerListener,
+                            CastSession.class);
+                }
+            });
+        } else {
+            Log.i(REACT_CLASS, "Error :> " + GOOGLE_CAST_NOT_AVAILABLE_MESSAGE);
+        }
     }
 
     @Override
     public void onHostPause() {
-        getReactApplicationContext().runOnUiQueueThread(new Runnable() {
-            @Override
-            public void run() {
-                SessionManager sessionManager =
-                        CastContext.getSharedInstance(getReactApplicationContext())
-                                .getSessionManager();
-                sessionManager.removeSessionManagerListener(mSessionManagerListener,
-                        CastSession.class);
-            }
-        });
+        if (CAST_AVAILABLE) {
+            getReactApplicationContext().runOnUiQueueThread(new Runnable() {
+                @Override
+                public void run() {
+                    SessionManager sessionManager =
+                            CastContext.getSharedInstance(getReactApplicationContext())
+                                    .getSessionManager();
+                    sessionManager.removeSessionManagerListener(mSessionManagerListener,
+                            CastSession.class);
+                }
+            });
+        } else {
+            Log.i(REACT_CLASS, "Error :> " + GOOGLE_CAST_NOT_AVAILABLE_MESSAGE);
+        }
     }
 
     @Override
